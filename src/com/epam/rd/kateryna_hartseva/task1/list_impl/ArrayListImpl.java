@@ -69,6 +69,12 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 			}
 			return (E) elementArray[cursor++];
 		}
+
+		//TODO:remove
+		@Override
+		public void remove() {
+
+		}
 	}
 
 	private class FilteredIteratorInside implements Iterator<E> {
@@ -100,6 +106,12 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 				throw new NoSuchElementException();
 			}
 			return (E) elementArray[cursor++];
+		}
+
+		//TODO:remove2
+		@Override
+		public void remove() {
+
 		}
 	}
 
@@ -230,6 +242,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 	@Override
 	public void clear() {
 		elementArray = EMPTY_ARRAY_DATA;
+		size = 0;
 	}
 
 
