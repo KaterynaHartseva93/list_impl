@@ -37,24 +37,30 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return size;
 	}
 
+
 	@Override
 	public boolean isEmpty() {
 		return size == 0;
 	}
+
 
 	@Override
 	public boolean contains(Object o) {
 		return indexOf(o) != -1;
 	}
 
+
 	private class IteratorInside implements Iterator<E> {
 
+
 		private int cursor;
+
 
 		@Override
 		public boolean hasNext() {
 			return cursor != size;
 		}
+
 
 		@Override
 		public E next() {
@@ -68,6 +74,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 	private class FilteredIteratorInside implements Iterator<E> {
 		private int cursor;
 		private Filter filter;
+
 
 		public FilteredIteratorInside(Filter<E> filter) {
 			this.filter = filter;
@@ -86,6 +93,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 			return false;
 		}
 
+
 		@Override
 		public E next() {
 			if (cursor >= size) {
@@ -95,11 +103,13 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		}
 	}
 
+
 	//TODO: Tests
 	@Override
 	public Iterator<E> iterator() {
 		return new IteratorInside();
 	}
+
 
 	//TODO: Tests
 	@Override
@@ -107,10 +117,12 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return new FilteredIteratorInside(filter);
 	}
 
+
 	@Override
 	public Object[] toArray() {
 		return Arrays.copyOf(elementArray, size);
 	}
+
 
 	//TODO: try to change this copy
 	@Override
@@ -125,6 +137,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return a;
 	}
 
+
 	//TODO: final check
 	@Override
 	public boolean add(E e) {
@@ -133,6 +146,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		elementArray[size++] = e;
 		return size > oldSize;
 	}
+
 
 	//TODO: check it
 	@Override
@@ -146,6 +160,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return false;
 	}
 
+
 	@Override
 	public boolean containsAll(Collection<?> c) {
 		for (Object o : c) {
@@ -155,6 +170,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		}
 		return true;
 	}
+
 
 	//TODO: check addAll
 	@Override
@@ -166,6 +182,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return collectionLength != 0;
 	}
 
+
 	//TODO:check addAll2
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
@@ -176,11 +193,13 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return collectionLength != 0;
 	}
 
+
 	//TODO: removeAll
 	@Override
 	public boolean removeAll(Collection<?> c) {
 		return filterList(c, true);
 	}
+
 
 	//TODO: retainAll
 	@Override
@@ -188,36 +207,38 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return filterList(c, false);
 	}
 
+
 	private boolean filterList(Collection<?> c, boolean isForDeleting) {
 		for (int i = 0; i < size; i++) {
-			if (c.contains(elementArray[i])) {
-				if (isForDeleting) {
-					System.arraycopy(elementArray, i + 1, elementArray, i, size - i);
-					elementArray[--size] = null;
-					// this is bad
-					i--;
-				} else {
-					System.arraycopy(elementArray, i + 1, elementArray, i, size - i);
-					elementArray[--size] = null;
-					// this is bad
-					i--;
-				}
+			if (c.contains(elementArray[i]) && isForDeleting) {
+				System.arraycopy(elementArray, i + 1, elementArray, i, size - i);
+				elementArray[--size] = null;
+				// this is bad
+				i--;
+			} else if (!c.contains(elementArray[i]) && !isForDeleting) {
+				System.arraycopy(elementArray, i + 1, elementArray, i, size - i);
+				elementArray[--size] = null;
+				// this is bad
+				i--;
 			}
 		}
 		//stub
 		return true;
 	}
 
+
 	@Override
 	public void clear() {
 		elementArray = EMPTY_ARRAY_DATA;
 	}
+
 
 	@Override
 	public E get(int index) {
 		assertRangeIsValid(index);
 		return (E) elementArray[index];
 	}
+
 
 	@Override
 	public E set(int index, E element) {
@@ -226,6 +247,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		elementArray[index] = element;
 		return previousElement;
 	}
+
 
 	@Override
 	public void add(int index, E element) {
@@ -236,6 +258,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		size++;
 	}
 
+
 	@Override
 	public E remove(int index) {
 		assertRangeIsValid(index);
@@ -244,6 +267,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		elementArray[size] = null;
 		return previousElement;
 	}
+
 
 	@Override
 	public int indexOf(Object o) {
@@ -256,6 +280,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return -1;
 	}
 
+
 	@Override
 	public int lastIndexOf(Object o) {
 		for (int index = size - 1; index >= 0; index--) {
@@ -267,6 +292,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return -1;
 	}
 
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder("[");
@@ -277,19 +303,32 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return builder.toString();
 	}
 
+
 	@Override
 	public ListIterator<E> listIterator() {
 		return null;
 	}
+
 
 	@Override
 	public ListIterator<E> listIterator(int index) {
 		return null;
 	}
 
+
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 		return null;
+	}
+
+	public void trimToSize() {
+		if (elementArray.length > size) {
+			if (size == 0) {
+				elementArray = EMPTY_ARRAY_DATA;
+			} else {
+				elementArray = Arrays.copyOf(elementArray, size);
+			}
+		}
 	}
 
 	private boolean assertRangeIsValid(int index) {
@@ -299,11 +338,13 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return true;
 	}
 
+
 	private void ensureArrayDataSize(int minCapacity) {
 		if (minCapacity > elementArray.length) {
 			needToGrow(minCapacity);
 		}
 	}
+
 
 	private void needToGrow(int minCapacity) {
 		int newCapacity = 0;
@@ -316,6 +357,7 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 			elementArray = Arrays.copyOf(elementArray, newCapacity);
 		}
 	}
+
 
 	private int getIndex(Object o, int index) {
 		if (o == null) {
@@ -330,3 +372,9 @@ public class ArrayListImpl<E> implements List<E>, FilteredIterable<E> {
 		return -1;
 	}
 }
+
+
+
+
+
+

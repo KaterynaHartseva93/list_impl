@@ -1,6 +1,5 @@
 package com.epam.rd.kateryna_hartseva.task1.list_impl;
 
-import static org.hamcrest.core.IsCollectionContaining.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,18 +15,18 @@ import static org.junit.Assert.*;
 public class ArrayListImplTest {
 	public static final String TEST_STRING = "TEST_STRING";
 
-    private ArrayListImpl<String> list;
+	private ArrayListImpl<String> list;
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-    @Before
-    public void setUp() {
-        list = new ArrayListImpl<String>();
-	    list.add("test_add");
-	    list.add("test_add2");
-	    list.add("test_add3");
-    }
+	@Before
+	public void setUp() {
+		list = new ArrayListImpl<String>();
+		list.add("test_add");
+		list.add("test_add2");
+		list.add("test_add3");
+	}
 
 	@Test
 	public void shouldAddElementToTheEndOfListWhenAddInvoke() {
@@ -69,7 +68,7 @@ public class ArrayListImplTest {
 		int indexForInsert = 1;
 		String[] expected = {"test_add", TEST_STRING, "test_add2", "test_add3"};
 		list.add(indexForInsert, TEST_STRING);
-		assertTrue(Arrays.equals(expected,list.toArray()));
+		assertTrue(Arrays.equals(expected, list.toArray()));
 	}
 
 	@Test
@@ -102,5 +101,47 @@ public class ArrayListImplTest {
 		list.get(index);
 	}
 
+	@Test
+	public void shouldIncrementIndexesToTheRightByOneWhenAddWithIndexInvoke() {
+		int indexForInsert = 1;
+		Object[] expected = {"test_add", TEST_STRING, "test_add2", "test_add3"};
+		list.add(indexForInsert, TEST_STRING);
+		assertTrue(Arrays.equals(expected, list.toArray()));
+	}
 
+	@Test
+	public void shouldInsertElementWhenAddWithIndexInvoke() {
+		int indexForInsert = 1;
+		list.add(indexForInsert, TEST_STRING);
+		assertEquals(TEST_STRING, list.get(indexForInsert));
+	}
+
+	@Test
+	public void shouldReturnSizeWhenMethodInvoked() {
+		int expected = 3;
+		assertEquals(expected, list.size());
+	}
+
+	@Test
+	public void shouldReturnTrueWhenListIsEmpty() {
+		list = new ArrayListImpl<String>();
+		assertTrue(list.isEmpty());
+	}
+
+	@Test
+	public void shouldReturnFalseWhenListContainsElements() {
+		assertFalse(list.isEmpty());
+	}
+
+	@Test
+	public void shouldReturnTrueWhenContainsThisElement() {
+		String presentInListElement = "test_add";
+		assertTrue(list.contains(presentInListElement));
+	}
+
+	@Test
+	public void shouldReturnFalseWhenThisElementIsAbsentInList() {
+		String absentElement = "absent";
+		assertFalse(list.contains(absentElement));
+	}
 }
